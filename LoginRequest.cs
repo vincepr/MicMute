@@ -37,9 +37,10 @@ namespace MicroMuteTerminal
         /// - if max_attempts==0 it will repeat infinite
         /// </summary>
 
-        public static async Task StartLoginLoop(ConnData data ,uint max_attempts)
+        public static async Task StartLoginLoop(ConnData data)
         {
             uint count = 0;
+            uint max_attempts = data.ConnectionAttempts;
             do
             {
                 try
