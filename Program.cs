@@ -20,7 +20,7 @@ namespace MicroMuteTerminal // Note: actual namespace depends on the project nam
                 data = Cmd.Init(args);
             }
             catch (Exception ex) { 
-                Console.WriteLine(ex);
+                Console.WriteLine(ex.Message);
                 return;
             }
             Console.WriteLine("Running MicroMute in the Terminal");

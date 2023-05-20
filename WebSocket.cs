@@ -68,7 +68,6 @@ namespace MicroMuteTerminal
             }
         }
 
-
         // Sends the string to the server using the WS
         private static async Task Send(ClientWebSocket socket, string data)
         {
@@ -79,7 +78,6 @@ namespace MicroMuteTerminal
                 CancellationToken.None
             );
         }
-
 
         // handler that keeps loop active to receive Events/Messages from the open WS-Connection to the Server.
         private static async Task Receive(ClientWebSocket socket)
