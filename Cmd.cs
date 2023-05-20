@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace MicroMuteTerminal
 {
-    // Parse command flags:
+    // Parse command flags, not pretty but i really dont want another library for it.
     internal class Cmd
     {
         // default Values
@@ -18,13 +18,13 @@ namespace MicroMuteTerminal
         private static bool   ISHTTPS  = false;
         private static uint   CONNECTION_ATTEMPTS_COUNT = 3;    // how often to retry login->WebSocket process before exiting
 
-        public static ConnData Init(string[] args)
+        public static ConnectionData Init(string[] args)
         {
             if (args.Length > 0)
                 foreach (string arg in args)
                     Parse(arg);
 
-            return new ConnData(USERNAME, PASSWORD, APIKEY, URL, ISHTTPS, CONNECTION_ATTEMPTS_COUNT);
+            return new ConnectionData(USERNAME, PASSWORD, APIKEY, URL, ISHTTPS, CONNECTION_ATTEMPTS_COUNT);
         }
 
         private static void Parse(string arg)
@@ -62,54 +62,6 @@ https=false             to change to http-only-mode
             else if (arg.StartsWith("-help") || arg.StartsWith("--help"))
                 throw new Exception(helptxt);
             else throw new Exception("\nInvalid Options, try:"+helptxt);
-
-
-            Console.WriteLine(arg);
         }
     }
-
-    // container to store all our Connection Data. Easier to pass down and change custom-formatting.
-    public class ConnData
-    {
-        public string Username { get; private set; }
-        public string Password { get; }
-        public string Apikey { get; }
-        public string Url { get; }  // without http:// BUT WITH PORT! ex: 'vincepr.de:1234'
-        public bool IsHTTPS { get; }
-
-        public uint ConnectionAttempts { get; private set; }
-
-        private string OriginalUsername { get; }
-        private string UsernameAppend { get; set; } = "";
-
-        public ConnData(string name, string pw, string apikey, string url, bool isHttps, uint connectionAttempts)
-        {
-            OriginalUsername = name;
-            Username = name;
-            Password = pw;
-            Apikey = apikey;
-            Url = url;
-            IsHTTPS = isHttps;
-            ConnectionAttempts = connectionAttempts;
-        }
-
-        public string ToBaseUrl() => IsHTTPS ? $"https://{Url}" : $"http://{Url}";
-        public string ToLoginUrl() => ToBaseUrl() + "/login_receiver";
-        public string ToWebSocketUrl() => IsHTTPS ? $"wss://{Url}/receiver" : $"ws://{Url}/receiver";
-        public string ToSuccessMessage()
-        {
-            return $"WebSocket connection successful established. Waiting for controllers to Send Events at \n\n {ToBaseUrl()}\n\n username: {Username}\n password: {Password}";
-        }
-        public LoginRequest ToLoginRequest() => new(Apikey, Username, Password);
-
-        // in case the username is already taken we try to add 3 random symbols at the end:
-        public void RNGUsername(string rng_str)
-        {
-            UsernameAppend = rng_str.Substring(0, 3);
-            Username = OriginalUsername + UsernameAppend;
-        }
-    }
-
-
-
 }

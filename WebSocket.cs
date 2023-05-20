@@ -19,7 +19,7 @@ namespace MicroMuteTerminal
 
         // Tries 2 times to Upgrade to a WebSocket connection on the supplied uri
         // - uri like "ws://vincepr.de:5555/login_receiver?otp=asdf12-12jfsadfp123kjasdf#g4k3i1" must include the one-time-password
-        public static async Task StartWebSocketLoop(ConnData data, string one_time_password)
+        public static async Task StartWebSocketLoop(ConnectionData data, string one_time_password)
         {
             int count = 0;
             do
@@ -27,11 +27,12 @@ namespace MicroMuteTerminal
                 using (var socket = new ClientWebSocket())
                     try
                     {
-                        Console.WriteLine("data-name:"+data.Username);
                         //await ConnectToWebSocket(socket, data, one_time_password);
                         await socket.ConnectAsync(new Uri(data.ToWebSocketUrl()+"?otp="+one_time_password), CancellationToken.None);
                         // await Send(socket, "data");      // no need to send data to server at the moment
+                        Console.ForegroundColor = ConsoleColor.Green;
                         Console.WriteLine(data.ToSuccessMessage());
+                        Console.ResetColor();
                         await Receive(socket);
                     }
                     catch (Exception ex)
@@ -55,7 +56,7 @@ namespace MicroMuteTerminal
         /// <param name="data"></param>
         /// <param name="otp"></param>
         /// <exception cref="Exception"></exception>
-        public static void ChangeUsernameIfAlreadyTaken(Exception ex, ConnData data, string otp)
+        public static void ChangeUsernameIfAlreadyTaken(Exception ex, ConnectionData data, string otp)
         {
             if (ex is WebSocketException
                     && ((WebSocketException)ex).WebSocketErrorCode == WebSocketError.NotAWebSocket

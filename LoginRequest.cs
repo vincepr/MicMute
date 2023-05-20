@@ -37,7 +37,7 @@ namespace MicroMuteTerminal
         /// - if max_attempts==0 it will repeat infinite
         /// </summary>
 
-        public static async Task StartLoginLoop(ConnData data)
+        public static async Task StartLoginLoop(ConnectionData data)
         {
             uint count = 0;
             uint max_attempts = data.ConnectionAttempts;
@@ -46,7 +46,6 @@ namespace MicroMuteTerminal
                 try
                 {
                     string otp = await Make_Request(data.ToLoginRequest());
-                    //Console.WriteLine("received one-time-password:" + otp);
                     await WebSocket.StartWebSocketLoop(data, otp);
 
                 }
@@ -66,9 +65,6 @@ namespace MicroMuteTerminal
         /// <summary>
         /// Make a request to the server with credentials provided. Server validates them and sends back a One-Time-Password (otp).
         /// </summary>
-        /// <param name="loginRequest"></param>
-        /// <returns></returns>
-        /// <exception cref="Exception"></exception>
         private static async Task<string> Make_Request(LoginRequest loginRequest)
         {
             HttpClient client = new HttpClient();

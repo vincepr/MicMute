@@ -15,7 +15,7 @@ namespace MicroMuteTerminal // Note: actual namespace depends on the project nam
         static async Task Main(string[] args)
         {
             // Try Parse Terminal flags or failback to defaults for data we run on:
-            ConnData data;
+            ConnectionData data;
             try {
                 data = Cmd.Init(args);
             }

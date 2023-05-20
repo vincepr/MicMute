@@ -9,6 +9,30 @@ namespace MicroMuteTerminal
 {
     internal class Event
     {
+        // this is the format the Server API sends us via websocket:
+        internal class EventResponse
+        {
+            public string type { get; }
+            public SignalToReceiver payload { get; }
+            public EventResponse(string type, SignalToReceiver payload)
+            {
+                this.type = type;
+                this.payload = payload;
+            }
+        }
+
+        // this is wrapped into the Payload of the EventType class
+        internal class SignalToReceiver
+        {
+            // the id contains the actual Signal we 
+            public string signal { get; }
+            public SignalToReceiver(string signal)
+            {
+                this.signal = signal;
+            }
+        }
+
+        // logic on what to do once we receive a msg over the Websocket.
         public static void Handle(string response)
         {
             var ev = JsonConvert.DeserializeObject<EventResponse>(response);
@@ -43,27 +67,4 @@ namespace MicroMuteTerminal
         }
     }
 
-    // this is the format the Server API sends us via websocket:
-    internal class EventResponse
-    {
-        public string type { get; }
-        public SignalToReceiver payload { get; }
-        public EventResponse(string type, SignalToReceiver payload)
-        {
-            this.type = type;
-            this.payload = payload; 
-        }
-    }
-
-    // this is wrapped into the Payload of the EventType class
-    internal class SignalToReceiver
-    {
-        // the id contains the actual Signal we 
-        public string signal { get; }
-        public SignalToReceiver(string signal)
-        {
-            this.signal = signal;
-        }
-
-    }
 }

@@ -55,7 +55,7 @@ namespace MicroMuteTerminal
 
         // Sends THE WM_APPCOMMAND to the foreground window:
         private static void Send(uint cmd_signal) => SendMessage(GetForegroundWindow(), WM_APPCOMMAND, IntPtr.Zero, (IntPtr)(cmd_signal << 16 | MASK));
-       
+
         // We expose all Volume Control Functions public
         public static void Volume_Toggle() => Send(CMD_VOLUME_TOGGLE);
         public static void Volume_Down() => Send(CMD_VOLUME_DOWN);
