@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics.Metrics;
 using System.Linq;
+using System.Net.Sockets;
 using System.Net.WebSockets;
 using System.Text;
 using System.Threading.Tasks;
@@ -26,34 +27,57 @@ namespace MicroMuteTerminal
                 using (var socket = new ClientWebSocket())
                     try
                     {
-                        Console.WriteLine(data.GetWebSocketUrl() + "?otp=" + one_time_password);
-                        await socket.ConnectAsync(new Uri(data.GetWebSocketUrl()+"?otp="+one_time_password), CancellationToken.None);
+                        Console.WriteLine("data-name:"+data.Username);
+                        //await ConnectToWebSocket(socket, data, one_time_password);
+                        await socket.ConnectAsync(new Uri(data.ToWebSocketUrl()+"?otp="+one_time_password), CancellationToken.None);
                         // await Send(socket, "data");      // no need to send data to server at the moment
-                        Console.WriteLine(data.GetSuccessMessage());
+                        Console.WriteLine(data.ToSuccessMessage());
                         await Receive(socket);
                     }
                     catch (Exception ex)
                     {
-                        count++;
+                        ChangeUsernameIfAlreadyTaken(ex, data, one_time_password);
                         Console.WriteLine($"WebSocket-ERROR - {ex.Message}");
                     }
                     finally
                     {
+                        count++;
                         if (socket != null) socket.Dispose();
                     }
 
             } while (count < 2);
         }
 
+        /// <summary>
+        /// this throws if conditions are met. Also side-effect changes the Username.
+        /// </summary>
+        /// <param name="ex"></param>
+        /// <param name="data"></param>
+        /// <param name="otp"></param>
+        /// <exception cref="Exception"></exception>
+        public static void ChangeUsernameIfAlreadyTaken(Exception ex, ConnData data, string otp)
+        {
+            if (ex is WebSocketException
+                    && ((WebSocketException)ex).WebSocketErrorCode == WebSocketError.NotAWebSocket
+                    && ex.Message.Contains("409")       // Status: 409 - Body "username already in use"   -  expected
+                    )
+            {
+                data.RNGUsername(otp);
+                throw new Exception("Username already taken, trying new username: " + data.Username);
+            }
+        }
+
 
         // Sends the string to the server using the WS
-        private static async Task Send(ClientWebSocket socket, string data) => 
+        private static async Task Send(ClientWebSocket socket, string data)
+        {
             await socket.SendAsync(
                 encoding.GetBytes(data), 
                 WebSocketMessageType.Text, 
                 true, 
                 CancellationToken.None
             );
+        }
 
 
         // handler that keeps loop active to receive Events/Messages from the open WS-Connection to the Server.

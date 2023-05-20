@@ -44,15 +44,18 @@ namespace MicroMuteTerminal
             {
                 try
                 {
-                    string otp = await Make_Request(data.GetLoginRequest());
-                    Console.WriteLine("received one-time-password:" + otp);
+                    string otp = await Make_Request(data.ToLoginRequest());
+                    //Console.WriteLine("received one-time-password:" + otp);
                     await WebSocket.StartWebSocketLoop(data, otp);
 
                 }
                 catch (Exception ex)
                 {
-                    count++;
                     Console.WriteLine("Mainloop-ERROR: " + ex.Message);
+                }
+                finally
+                {
+                    count++;
                 }
             } while (max_attempts == 0 || count < max_attempts);
             // C_A_T==0 -> infinite retries, otherwise stop after x ammount of reconnect attempts:
