@@ -45,7 +45,7 @@ namespace MicroMuteTerminal
             {
                 try
                 {
-                    string otp = await Make_Request(data.ToLoginRequest());
+                    string otp = await Make_Request(data);
                     await WebSocket.StartWebSocketLoop(data, otp);
 
                 }
@@ -65,12 +65,12 @@ namespace MicroMuteTerminal
         /// <summary>
         /// Make a request to the server with credentials provided. Server validates them and sends back a One-Time-Password (otp).
         /// </summary>
-        private static async Task<string> Make_Request(LoginRequest loginRequest)
+        private static async Task<string> Make_Request(ConnectionData data)
         {
             HttpClient client = new HttpClient();
-            string json = JsonConvert.SerializeObject(loginRequest);
+            string json = JsonConvert.SerializeObject(data.ToLoginRequest());
             HttpContent content = new StringContent(json);
-            HttpResponseMessage? response = await client.PostAsync("http://vprobst.de:5555/login_receiver", content);
+            HttpResponseMessage? response = await client.PostAsync(data.ToLoginUrl(), content);
             if (response == null) { throw new Exception("Error - No Response received!"); }
             if (response.IsSuccessStatusCode)
             {

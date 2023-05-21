@@ -14,8 +14,8 @@ namespace MicroMuteTerminal
         private static string USERNAME = "bob";
         private static string PASSWORD = "123";
         private static string APIKEY   = "noauth";
-        private static string URL      = "vprobst.de:5555";
-        private static bool   ISHTTPS  = false;
+        private static string URL      = "mic.vprobst.de";
+        private static bool   ISHTTPS  = true;
         private static uint   CONNECTION_ATTEMPTS_COUNT = 3;    // how often to retry login->WebSocket process before exiting
 
         public static ConnectionData Init(string[] args)
@@ -23,7 +23,7 @@ namespace MicroMuteTerminal
             if (args.Length > 0)
                 foreach (string arg in args)
                     Parse(arg);
-
+            Console.WriteLine("using url:" + URL);
             return new ConnectionData(USERNAME, PASSWORD, APIKEY, URL, ISHTTPS, CONNECTION_ATTEMPTS_COUNT);
         }
 
