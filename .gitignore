@@ -3,6 +3,11 @@
 ##
 ## Get latest from https://github.com/github/gitignore/blob/master/VisualStudio.gitignore
 
+# Adding the custom release because i'm lazy
+!bin/Release/latest/*
+!bin/Release/latest/
+
+
 # User-specific files
 *.rsuser
 *.suo
