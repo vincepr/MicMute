@@ -38,7 +38,7 @@ MicroMute Options
 --pw=22                   to set password to 22
 --count=3                 number of attempts to reconnect. 0 for infinite
 
---api=key                 if you selfhost
+--api=key                 if you selfhost and want your own api key
 --url=mic.vincepr.de:123  to point to your own ipaddr
 --https=false             to change to http-only-mode
 ";
