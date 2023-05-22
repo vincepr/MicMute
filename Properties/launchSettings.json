@@ -1,7 +1,8 @@
 {
   "profiles": {
     "MicroMuteTerminal": {
-      "commandName": "Project"
+      "commandName": "Project",
+      "commandLineArgs": "--user=james --pw=bob"
     }
   }
 }

@@ -34,28 +34,28 @@ MicroMute Options
 
 -help or --help         for this help
 
-user=jim                to set username to 'jim'
-pw=22                   to set password to 22
-count=3                 number of attempts to reconnect. 0 for infinite
+--user=jim                to set username to 'jim'
+--pw=22                   to set password to 22
+--count=3                 number of attempts to reconnect. 0 for infinite
 
-api=key                 if you selfhost
-url=mic.vincepr.de:123  to point to your own ipaddr
-https=false             to change to http-only-mode
+--api=key                 if you selfhost
+--url=mic.vincepr.de:123  to point to your own ipaddr
+--https=false             to change to http-only-mode
 ";
 
-            if (arg.StartsWith("name=")) USERNAME = arg["name=".Length..];
-            else if (arg.StartsWith("pw=")) PASSWORD = arg["pw=".Length..];
-            else if (arg.StartsWith("api=")) APIKEY = arg["api=".Length..];
-            else if (arg.StartsWith("url=")) URL = arg["url=".Length..];
-            else if (arg.StartsWith("https="))
+            if      (arg.StartsWith("--user=")) USERNAME = arg["--user=".Length..];
+            else if (arg.StartsWith("--pw="))   PASSWORD = arg["--pw=".Length..];
+            else if (arg.StartsWith("--api="))  APIKEY   = arg["--api=".Length..];
+            else if (arg.StartsWith("--url="))  URL      = arg["--url=".Length..];
+            else if (arg.StartsWith("--https="))
             {
-                var isValid = bool.TryParse(arg["https=".Length..], out bool result);
+                var isValid = bool.TryParse(arg["--https=".Length..], out bool result);
                 if (isValid) ISHTTPS = result;
-                else throw new Exception("Failed parsing https=... ONLY true or false allowed");
+                else throw new Exception("Failed parsing --https=... ONLY true or false allowed");
             }
-            else if (arg.StartsWith("count="))
+            else if (arg.StartsWith("--count="))
             {
-                var isValid = uint.TryParse(arg["count=".Length..], out uint result);
+                var isValid = uint.TryParse(arg["--count=".Length..], out uint result);
                 if (isValid) CONNECTION_ATTEMPTS_COUNT = result;
                 else throw new Exception("Failed parsing count=... must be uint");
             }
