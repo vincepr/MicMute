@@ -1,5 +1,14 @@
 # MicMute App
 Check out the website at: https://mic.vprobst.de
+
+## How To Use
+- compile it yourself using dotnet or download the latest Release: [MicMute.exe](https://github.com/vincepr/MicMute/releases/tag/v0.8)
+- then open the folder in your Terminal.
+- `.\MicMute.exe` for default settings.
+- `.\MicMute.exe name=james pw=bond` with custom name and pw.
+
+![example](./example_gif.gif)
+
 ## About
 
 Goal of this project was to enable remote controlling the microphone of the target computer. Controlled Signals from the Website hosted by [micmute_server](https://github.com/vincepr/go_micmute_server).
@@ -51,9 +60,3 @@ if selfhosting the [micmute_server](https://github.com/vincepr/go_micmute_server
 --api=lkasdf012-38rjhy87dcfa8sdf-32f98asdff324
 ```
 
-## How To Use
-- download the latest Release or compile it yourself using dotnet. [MicMute.exe](https://github.com/vincepr/Mic_Mute/blob/master/win-x86/MicMute.exe)
-
-- then open the folder in your Terminal
-- `./MicMute.exe` for default settings
-- `./MicMute.exe name=james pw=bond` with custom name and pw
